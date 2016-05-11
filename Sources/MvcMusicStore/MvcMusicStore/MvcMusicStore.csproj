@@ -296,7 +296,7 @@
     <Content Include="Views\Store\Browse.cshtml" />
     <Content Include="Views\Store\Details.cshtml" />
     <Content Include="Views\Store\GenreMenu.cshtml" />
-    <Content Include="Views\Account\LogOn.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />
