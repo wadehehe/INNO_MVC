@@ -19,7 +19,7 @@ namespace Mvc3ToolsUpdateWeb_Default.Controllers
             var cart = ShoppingCart.GetCart(this.HttpContext);
 
             cart.MigrateCart(UserName);
-             
+            Session[ShoppingCart.CartSessionKey] = UserName;
         }
 
         //
