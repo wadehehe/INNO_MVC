@@ -19,7 +19,7 @@ namespace Mvc3ToolsUpdateWeb_Default.Controllers
             var cart = ShoppingCart.GetCart(this.HttpContext);
 
             cart.MigrateCart(UserName);
-            Session[ShoppingCart.CartSessionKey] = UserName;
+             
         }
 
         //
@@ -43,15 +43,15 @@ namespace Mvc3ToolsUpdateWeb_Default.Controllers
                     MigrateShoppingCart(model.UserName);
 
                     FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
-                    if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
-                        && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
-                    {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
+                    //if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
+                    //    && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+                    //{
+                    //    return Redirect(returnUrl);
+                    //}
+                    //else
+                    //{
                         return RedirectToAction("Index", "Home");
-                    }
+                    //}
                 }
                 else
                 {
