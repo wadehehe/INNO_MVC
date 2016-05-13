@@ -59,22 +59,23 @@ namespace Mvc3ToolsUpdateWeb_Default.Controllers
             //        ModelState.AddModelError("", "The user name or password provided is incorrect.");
             //    }
             //}
-            var list = db.User.Where(a => a.Name == model.UserName);
             var user = db.User.Where(a => a.Name == model.UserName).FirstOrDefault();
-            if (user.PassWord==model.Password)
+            if (user!=null)
             {
-                MigrateShoppingCart(model.UserName);
-                if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
-                            && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+                if (user.PassWord == model.Password)
                 {
-                    return Redirect(returnUrl);
-                }
-                else
-                {
-                    return RedirectToAction("Index", "Home");
+                    MigrateShoppingCart(model.UserName);
+                    if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
+                                && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
             }
-
             // If we got this far, something failed, redisplay form
             return View(model);
         }
