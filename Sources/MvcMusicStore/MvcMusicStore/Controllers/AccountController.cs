@@ -12,6 +12,7 @@ namespace Mvc3ToolsUpdateWeb_Default.Controllers
 {
     public class AccountController : Controller
     {
+        private MusicStoreEntities db = new MusicStoreEntities();
 
         private void MigrateShoppingCart(string UserName)
         {
@@ -36,26 +37,41 @@ namespace Mvc3ToolsUpdateWeb_Default.Controllers
         [HttpPost]
         public ActionResult Login(LogOnModel model, string returnUrl)
         {
-            if (ModelState.IsValid)
-            {
-                if (Membership.ValidateUser(model.UserName, model.Password))
-                {
-                    MigrateShoppingCart(model.UserName);
+            //if (ModelState.IsValid)
+            //{
+            //    if (Membership.ValidateUser(model.UserName, model.Password))
+            //    {
+            //        MigrateShoppingCart(model.UserName);
 
-                    FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
-                    //if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
-                    //    && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
-                    //{
-                    //    return Redirect(returnUrl);
-                    //}
-                    //else
-                    //{
-                        return RedirectToAction("Index", "Home");
-                    //}
+            //        FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
+            //        //if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
+            //        //    && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+            //        //{
+            //        //    return Redirect(returnUrl);
+            //        //}
+            //        //else
+            //        //{
+            //        return RedirectToAction("Index", "Home");
+            //        //}
+            //    }
+            //    else
+            //    {
+            //        ModelState.AddModelError("", "The user name or password provided is incorrect.");
+            //    }
+            //}
+            var list = db.User.Where(a => a.Name == model.UserName);
+            var user = db.User.Where(a => a.Name == model.UserName).FirstOrDefault();
+            if (user.PassWord==model.Password)
+            {
+                MigrateShoppingCart(model.UserName);
+                if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
+                            && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+                {
+                    return Redirect(returnUrl);
                 }
                 else
                 {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                    return RedirectToAction("Index", "Home");
                 }
             }
 
@@ -90,19 +106,30 @@ namespace Mvc3ToolsUpdateWeb_Default.Controllers
             if (ModelState.IsValid)
             {
                 // Attempt to register the user
-                MembershipCreateStatus createStatus;
-                Membership.CreateUser(model.UserName, model.Password, model.Email, "question", "answer", true, null, out createStatus);
+                //MembershipCreateStatus createStatus;
+                //Membership.CreateUser(model.UserName, model.Password, model.Email, "question", "answer", true, null, out createStatus);
 
-                if (createStatus == MembershipCreateStatus.Success)
+                //if (createStatus == MembershipCreateStatus.Success)
+                //{
+                //    MigrateShoppingCart(model.UserName);
+
+                //    FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
+                //    return RedirectToAction("Index", "Home");
+                //}
+                //else
+                //{
+                //    ModelState.AddModelError("", ErrorCodeToString(createStatus));
+                //}
+                User newUser = new User();
+                newUser.Name = model.UserName;
+                newUser.PassWord = model.Password;
+                newUser.Email = model.Email;
+                newUser.RoleId = 2;
+                var flag = db.User.Add(newUser);
+                if (flag!=null)
                 {
                     MigrateShoppingCart(model.UserName);
-
-                    FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
                     return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("", ErrorCodeToString(createStatus));
                 }
             }
 

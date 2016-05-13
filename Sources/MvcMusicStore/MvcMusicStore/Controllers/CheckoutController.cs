@@ -5,17 +5,23 @@ using MvcMusicStore.Models;
 
 namespace MvcMusicStore.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class CheckoutController : Controller
     {
         MusicStoreEntities storeDB = new MusicStoreEntities();
         const string PromoCode = "FREE";
-
+        private MusicStoreEntities db = new MusicStoreEntities();
         //
         // GET: /Checkout/AddressAndPayment
 
         public ActionResult AddressAndPayment()
         {
+            var userName = Session[ShoppingCart.CartSessionKey];
+            var user = db.User.Where(a => a.Name == (string)userName).FirstOrDefault();
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View();
         }
 
@@ -25,6 +31,7 @@ namespace MvcMusicStore.Controllers
         [HttpPost]
         public ActionResult AddressAndPayment(FormCollection values)
         {
+            
             var order = new Order();
             TryUpdateModel(order);
 

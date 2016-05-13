@@ -9,16 +9,33 @@ using MvcMusicStore.Models;
 
 namespace MvcMusicStore.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    //[Authorize(Roles = "Administrator")]
     public class StoreManagerController : Controller
     {
         private MusicStoreEntities db = new MusicStoreEntities();
 
+        public ActionResult verify()
+        {
+            var userName = Session[ShoppingCart.CartSessionKey];
+            var user = db.User.Where(a => a.Name == (string)userName).FirstOrDefault();
+            if (user == null || user.RoleId != 1)
+            {
+                Dispose(true);
+                return RedirectToAction("Login", "Account");
+            }
+            return RedirectToAction("Index");
+        }
         //
         // GET: /StoreManager/
-
         public ViewResult Index()
         {
+            //var userName = Session[ShoppingCart.CartSessionKey];
+            //var user = db.User.Where(a => a.Name == (string)userName).FirstOrDefault();
+            //if (user == null || user.RoleId != 1)
+            //{
+            //    Dispose(true);
+            //    return View();
+            //}
             var albums = db.Albums.Include(a => a.Genre).Include(a => a.Artist);
             return View(albums.ToList());
         }
